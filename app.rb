@@ -1,9 +1,16 @@
 require "sinatra"
 require "sinatra/reloader"
+require "http"
+require "json"
 
 get("/") do
-  "
-  <h1>Welcome to your Sinatra App!</h1>
-  <p>Define some routes in app.rb</p>
-  "
+  erb(:index)
+end
+
+get("/random_dog") do 
+  dog_api_url = "https://random.dog/woof.json"
+  raw_response = HTTP.get(dog_api_url)
+  parsed_response = JSON.parse(raw_response)
+  @dog_image_url = parsed_response.fetch("url")
+  erb(:show)
 end
